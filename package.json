@@ -1,5 +1,5 @@
 {
-  "name": "javascript-lotto",
+  "name": "open-mission-1",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,7 +11,8 @@
     "@babel/core": "^7.25.8",
     "@babel/preset-env": "^7.25.8",
     "babel-jest": "^30.1.2",
-    "jest": "^30.1.2"
+    "jest": "^30.1.2",
+    "vite": "^7.2.2"
   },
   "dependencies": {
     "@woowacourse/mission-utils": "^2.2.0"
