@@ -1,11 +1,11 @@
 {
-  "name": "open-mission-1",
+  "name": "open-mission-step-1",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "jest --detectOpenHandles"
+    "start:cli": "node ./cli/index.js",
+    "dev:web": "vite --config web/vite.config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.25.8",
