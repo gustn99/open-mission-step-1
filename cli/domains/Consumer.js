@@ -1,13 +1,24 @@
 import { Random } from "@woowacourse/mission-utils";
 import Lotto from "./Lotto.js";
+import { PRIZE } from "../constants/lotto.js";
 
 class Consumer {
   #purchaseAmount;
   #lottos;
+  #winningResult;
+  #totalPrize;
 
   constructor() {
     this.#purchaseAmount = 0;
     this.#lottos = [];
+    this.#winningResult = {
+      first: 0,
+      second: 0,
+      third: 0,
+      fourth: 0,
+      fifth: 0,
+    };
+    this.#totalPrize = 0;
   }
 
   purchaseLotto(purchaseAmount, lottos = []) {
@@ -48,6 +59,28 @@ class Consumer {
 
   getPurchaseCount() {
     return this.#purchaseAmount / 1000;
+  }
+
+  getReturnRate() {
+    return (this.#totalPrize / this.#purchaseAmount) * 100;
+  }
+
+  checkWinningResult(winningNumbers) {
+    this.#updateRanking(winningNumbers);
+    this.#calculateTotalPrize();
+  }
+
+  #updateRanking(winningNumbers) {
+    this.#lottos.forEach((lotto) => {
+      const ranking = winningNumbers.calculateRanking(lotto);
+      if (ranking) this.#winningResult[ranking] += 1;
+    });
+  }
+
+  #calculateTotalPrize() {
+    Object.entries(this.#winningResult).forEach(([ranking, count]) => {
+      this.#totalPrize += PRIZE[ranking] * count;
+    });
   }
 }
 

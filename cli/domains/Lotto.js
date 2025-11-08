@@ -23,7 +23,14 @@ class Lotto {
     }
   }
 
-  // TODO: 추가 기능 구현
+  matches(another) {
+    const matchArray = this.#numbers.filter((num) => another.includes(num));
+    return matchArray.length;
+  }
+
+  includes(number) {
+    return this.#numbers.includes(number);
+  }
 }
 
 export default Lotto;
