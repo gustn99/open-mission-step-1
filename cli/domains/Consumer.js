@@ -24,7 +24,10 @@ class Consumer {
   purchaseLotto(purchaseAmount, lottos = []) {
     this.#validatePurchaseAmount(purchaseAmount);
     this.#purchaseAmount = purchaseAmount;
-    this.#lottos = this.#createLottos(purchaseAmount, lottos);
+
+    const purchaseCount = this.getPurchaseCount();
+    this.#validateLottos(purchaseCount, lottos);
+    this.#lottos = this.#createLottos(purchaseCount, lottos);
   }
 
   #validatePurchaseAmount(purchaseAmount) {
@@ -41,16 +44,29 @@ class Consumer {
     }
   }
 
-  #createLottos(purchaseAmount, lottos) {
-    if (lottos.length === 0) {
-      return this.#generateAutoLottos(purchaseAmount);
-    }
+  #validateLottos(purchaseCount, lottos) {
+    if (lottos.length === 0) return;
 
-    return lottos.map((lotto) => new Lotto(lotto));
+    const manualLottoCount = lottos.length;
+    if (purchaseCount < manualLottoCount) {
+      throw new Error("[ERROR] 구매 금액보다 더 많은 로또가 입력되었습니다.");
+    }
   }
 
-  #generateAutoLottos(purchaseAmount) {
-    const count = purchaseAmount / 1000;
+  #createLottos(purchaseCount, lottos) {
+    const manualLottoCount = lottos.length;
+    const autoLottoCount = purchaseCount - manualLottoCount;
+    const createdLottos = [];
+
+    if (autoLottoCount > 0) {
+      createdLottos.push(...this.#generateAutoLottos(autoLottoCount));
+    }
+    createdLottos.push(...lottos.map((numbers) => new Lotto(numbers)));
+
+    return createdLottos;
+  }
+
+  #generateAutoLottos(count) {
     return Array.from(
       { length: count },
       () => new Lotto(Random.pickUniqueNumbersInRange(1, 45, 6))

@@ -11,7 +11,10 @@ class App {
 
   async run() {
     const consumer = new Consumer();
-    consumer.purchaseLotto(4000);
+    consumer.purchaseLotto(4000, [
+      [1, 2, 3, 4, 5, 8],
+      [1, 3, 5, 6, 7, 9],
+    ]);
     this.#printInputResult(consumer);
 
     const winningNumbers = new WinningNumbers([1, 2, 3, 4, 5, 6], 7);
