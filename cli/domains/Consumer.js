@@ -57,14 +57,6 @@ class Consumer {
     );
   }
 
-  getPurchaseCount() {
-    return this.#purchaseAmount / 1000;
-  }
-
-  getReturnRate() {
-    return (this.#totalPrize / this.#purchaseAmount) * 100;
-  }
-
   checkWinningResult(winningNumbers) {
     this.#updateRanking(winningNumbers);
     this.#calculateTotalPrize();
@@ -81,6 +73,22 @@ class Consumer {
     Object.entries(this.#winningResult).forEach(([ranking, count]) => {
       this.#totalPrize += PRIZE[ranking] * count;
     });
+  }
+
+  getPurchaseCount() {
+    return this.#purchaseAmount / 1000;
+  }
+
+  getLottos() {
+    return [...this.#lottos];
+  }
+
+  getWinningResult() {
+    return { ...this.#winningResult };
+  }
+
+  getReturnRate() {
+    return (this.#totalPrize / this.#purchaseAmount) * 100;
   }
 }
 
