@@ -1,8 +1,11 @@
-import { Console } from "@woowacourse/mission-utils";
+import Consumer from "./domains/Consumer.js";
 
 class App {
+  constructor() {}
+
   async run() {
-    Console.print("open mission step 1 - cli");
+    const consumer = new Consumer();
+    consumer.purchaseLotto(3000);
   }
 }
 
