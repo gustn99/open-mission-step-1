@@ -1,5 +1,5 @@
-import { MATCH_STRING, PRIZE } from "../constants/lotto.js";
-import { formatNumber } from "../utils/numberUtils.js";
+import { MATCH_STRING, PRIZE } from "../../constants/lotto.js";
+import { formatNumber } from "../../utils/numberUtils.js";
 
 class Formatter {
   formatPurchaseCount(purchaseCount) {

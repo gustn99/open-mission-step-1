@@ -1,8 +1,8 @@
 import Consumer from "./domains/Consumer.js";
 import WinningNumbers from "./domains/WinningNumbers.js";
-import Formatter from "./formatters/Formatter.js";
-import InputView from "./views/InputView.js";
-import OutputView from "./views/OutputView.js";
+import Formatter from "./views/formatters/Formatter.js";
+import InputView from "./views/input/InputView.js";
+import OutputView from "./views/output/OutputView.js";
 
 class App {
   constructor() {
