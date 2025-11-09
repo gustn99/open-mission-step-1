@@ -8,9 +8,14 @@ class Consumer {
   #winningResult;
   #totalPrize;
 
-  constructor() {
-    this.#purchaseAmount = 0;
-    this.#lottos = [];
+  constructor(purchaseAmount, lottos) {
+    this.#validatePurchaseAmount(purchaseAmount);
+    this.#purchaseAmount = purchaseAmount;
+
+    const purchaseCount = this.getPurchaseCount();
+    this.#validateLottos(purchaseCount, lottos);
+    this.#lottos = this.#createLottos(purchaseCount, lottos);
+
     this.#winningResult = {
       first: 0,
       second: 0,
@@ -19,15 +24,6 @@ class Consumer {
       fifth: 0,
     };
     this.#totalPrize = 0;
-  }
-
-  purchaseLotto(purchaseAmount, lottos = []) {
-    this.#validatePurchaseAmount(purchaseAmount);
-    this.#purchaseAmount = purchaseAmount;
-
-    const purchaseCount = this.getPurchaseCount();
-    this.#validateLottos(purchaseCount, lottos);
-    this.#lottos = this.#createLottos(purchaseCount, lottos);
   }
 
   #validatePurchaseAmount(purchaseAmount) {

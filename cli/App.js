@@ -15,8 +15,7 @@ class App {
     const purchaseAmount = await this.#readPurchaseAmount();
     const lottos = await this.#readLottos();
 
-    const consumer = new Consumer();
-    consumer.purchaseLotto(purchaseAmount, lottos);
+    const consumer = new Consumer(purchaseAmount, lottos);
     this.#printInputResult(consumer);
 
     const { winningNumbers: winningNumbersInput, bonusNumber } =
