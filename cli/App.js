@@ -5,11 +5,7 @@ import InputView from "./views/input/InputView.js";
 import OutputView from "./views/output/OutputView.js";
 
 class App {
-  constructor() {
-    this.inputView = new InputView();
-    this.outputView = new OutputView();
-    this.formatter = new Formatter();
-  }
+  constructor() {}
 
   async run() {
     const purchaseAmount = await this.#readPurchaseAmount();
@@ -26,7 +22,7 @@ class App {
   }
 
   async #readPurchaseAmount() {
-    const purchaseAmountString = await this.inputView.read(
+    const purchaseAmountString = await InputView.read(
       "구매금액을 입력해 주세요."
     );
     const purchaseAmount = Number(purchaseAmountString);
@@ -35,24 +31,24 @@ class App {
 
   async #readLottos() {
     const lottos = [];
-    let input = await this.inputView.read("로또 번호를 입력해 주세요.");
+    let input = await InputView.read("로또 번호를 입력해 주세요.");
 
     while (input !== "") {
       const numbers = input.split(",").map(Number);
       lottos.push(numbers);
-      input = await this.inputView.read("로또 번호를 입력해 주세요.");
+      input = await InputView.read("로또 번호를 입력해 주세요.");
     }
 
     return lottos;
   }
 
   async #readWinningNumbers() {
-    const winningNumbersString = await this.inputView.read(
+    const winningNumbersString = await InputView.read(
       "당첨 번호를 입력해 주세요."
     );
     const winningNumbers = winningNumbersString.split(",").map(Number);
 
-    const bonusNumberString = await this.inputView.read(
+    const bonusNumberString = await InputView.read(
       "보너스 번호를 입력해 주세요."
     );
     const bonusNumber = Number(bonusNumberString);
@@ -64,26 +60,24 @@ class App {
     const purchaseCount = consumer.getPurchaseCount();
     const lottos = consumer.getLottos();
 
-    const formattedPurchaseCount =
-      this.formatter.formatPurchaseCount(purchaseCount);
-    const formattedLottos = this.formatter.formatLottos(lottos);
+    const formattedPurchaseCount = Formatter.formatPurchaseCount(purchaseCount);
+    const formattedLottos = Formatter.formatLottos(lottos);
 
-    this.outputView.print(formattedPurchaseCount);
-    this.outputView.print(formattedLottos);
+    OutputView.print(formattedPurchaseCount);
+    OutputView.print(formattedLottos);
   }
 
   #printWinningResult(consumer) {
     const winningResult = consumer.getWinningResult();
     const returnRate = consumer.getReturnRate();
 
-    const formattedWinningResult =
-      this.formatter.formatWinningResult(winningResult);
-    const formattedReturnRate = this.formatter.formatReturnRate(returnRate);
+    const formattedWinningResult = Formatter.formatWinningResult(winningResult);
+    const formattedReturnRate = Formatter.formatReturnRate(returnRate);
 
-    this.outputView.print("당첨 통계");
-    this.outputView.print("---");
-    this.outputView.print(formattedWinningResult);
-    this.outputView.print(formattedReturnRate);
+    OutputView.print("당첨 통계");
+    OutputView.print("---");
+    OutputView.print(formattedWinningResult);
+    OutputView.print(formattedReturnRate);
   }
 }
 
