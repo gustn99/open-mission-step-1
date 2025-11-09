@@ -1,10 +1,11 @@
-import Formatter from "../formatters/Formatter.js";
+import Formatter from "../formatters/PurchaseSummaryFormatter.js";
 import OutputView from "./OutputView.js";
 
 class PurchaseSummaryOutputView {
   static print(purchaseCount, lottos) {
     this.#printPurchaseCount(purchaseCount);
     this.#printLottos(lottos);
+    OutputView.print();
   }
 
   static #printPurchaseCount(purchaseCount) {

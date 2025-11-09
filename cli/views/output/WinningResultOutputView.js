@@ -1,8 +1,9 @@
-import Formatter from "../formatters/Formatter.js";
+import Formatter from "../formatters/WinningResultFormatter.js";
 import OutputView from "./OutputView.js";
 
 class WinningResultOutputView {
   static print(winningResult, returnRate) {
+    OutputView.print();
     OutputView.print("당첨 통계");
     OutputView.print("---");
     this.#printWinningResult(winningResult);
