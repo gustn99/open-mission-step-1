@@ -1,3 +1,4 @@
-import { Random } from "./utils/Random";
+import App from "./App";
 
-console.log(Random.pickUniqueNumbersInRange(1, 45, 6));
+const app = new App();
+await app.run();
