@@ -5,20 +5,34 @@ import PurchaseInputView from "./views/input/PurchaseInputView.js";
 import WinningNumbersInputView from "./views/input/WinningNumbersInputView.js";
 import PurchaseSummaryOutputView from "./views/output/PurchaseSummaryOutputView.js";
 import WinningResultOutputView from "./views/output/WinningResultOutputView.js";
+import OutputView from "./views/output/OutputView.js";
 
 class App {
   constructor() {}
 
   async run() {
-    const purchaseAmount = await PurchaseInputView.read();
-    const lottos = await LottosInputView.read();
+    let consumer;
+    while (!consumer) {
+      try {
+        const purchaseAmount = await PurchaseInputView.read();
+        const lottos = await LottosInputView.read();
+        consumer = new Consumer(purchaseAmount, lottos);
+        this.#printInputResult(consumer);
+      } catch (error) {
+        OutputView.print(error.message);
+      }
+    }
 
-    const consumer = new Consumer(purchaseAmount, lottos);
-    this.#printInputResult(consumer);
-
-    const { winningNumbers: rawWinningNumbers, bonusNumber } =
-      await WinningNumbersInputView.read();
-    const winningNumbers = new WinningNumbers(rawWinningNumbers, bonusNumber);
+    let winningNumbers;
+    while (!winningNumbers) {
+      try {
+        const { winningNumbers: rawWinningNumbers, bonusNumber } =
+          await WinningNumbersInputView.read();
+        winningNumbers = new WinningNumbers(rawWinningNumbers, bonusNumber);
+      } catch (error) {
+        OutputView.print(error.message);
+      }
+    }
 
     consumer.checkWinningResult(winningNumbers);
     this.#printWinningResult(consumer);
