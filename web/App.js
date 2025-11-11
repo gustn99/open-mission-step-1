@@ -80,7 +80,9 @@ class App {
   #paintSavedLottos = () => {
     const container = document.querySelector("#saved-lottos-container");
     const lottos = this.#lottos.join("\n");
-    OutputView.print(container, lottos);
+    OutputView.replace(container, "구입할 로또");
+    OutputView.append(container, lottos);
+    OutputView.append(container, "---");
   };
 
   #paintPurchaseSummary = () => {

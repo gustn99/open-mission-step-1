@@ -9,12 +9,12 @@ class PurchaseSummaryOutputView {
 
   static #printPurchaseCount(parent, purchaseCount) {
     const formattedPurchaseCount = Formatter.formatPurchaseCount(purchaseCount);
-    OutputView.print(parent, formattedPurchaseCount);
+    OutputView.append(parent, formattedPurchaseCount);
   }
 
   static #printLottos(parent, lottos) {
     const formattedLottos = Formatter.formatLottos(lottos);
-    OutputView.print(parent, formattedLottos);
+    OutputView.append(parent, formattedLottos);
   }
 }
 
