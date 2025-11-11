@@ -19,7 +19,7 @@ class App {
     this.purchaseForm = new PurchaseInputView(
       this.#handlePurchaseSubmit,
       this.#handleLottoButtonClick,
-      this.#handlePurchaseInputError
+      () => this.#setLottos([])
     );
     this.winningNumbersForm = new WinningNumbersInputView(
       this.#handleWinningNumbersSubmit
@@ -45,26 +45,42 @@ class App {
     this.winningNumbersForm.render(winningNumbersFormContainer);
   };
 
-  #handleLottoButtonClick = (parent, lotto) => {
-    this.#lottos.push(lotto);
-    OutputView.print(parent, lotto);
+  #handleLottoButtonClick = (lotto) => {
+    this.#setLottos([...this.#lottos, lotto]);
   };
 
   #handlePurchaseSubmit = (purchaseAmount) => {
-    this.#consumer = new Consumer(purchaseAmount, this.#lottos);
-    this.#paintPurchaseSummary();
+    this.#setConsumer(new Consumer(purchaseAmount, this.#lottos));
     this.purchaseForm.setDisabled(true);
     this.winningNumbersForm.setDisabled(false);
   };
 
-  #handlePurchaseInputError = () => {
-    this.#lottos = [];
+  #handleWinningNumbersSubmit = (winningNumberArray, bonusNumber) => {
+    this.#setWinningNumbers(
+      new WinningNumbers(winningNumberArray, bonusNumber)
+    );
+    this.winningNumbersForm.setDisabled(true);
   };
 
-  #handleWinningNumbersSubmit = (winningNumberArray, bonusNumber) => {
-    this.#winningNumbers = new WinningNumbers(winningNumberArray, bonusNumber);
+  #setLottos = (lottos) => {
+    this.#lottos = lottos;
+    this.#paintSavedLottos();
+  };
+
+  #setConsumer = (consumer) => {
+    this.#consumer = consumer;
+    this.#paintPurchaseSummary();
+  };
+
+  #setWinningNumbers = (winningNumbers) => {
+    this.#winningNumbers = winningNumbers;
     this.#paintWinningResult();
-    this.winningNumbersForm.setDisabled(true);
+  };
+
+  #paintSavedLottos = () => {
+    const container = document.querySelector("#saved-lottos-container");
+    const lottos = this.#lottos.join("\n");
+    OutputView.print(container, lottos);
   };
 
   #paintPurchaseSummary = () => {

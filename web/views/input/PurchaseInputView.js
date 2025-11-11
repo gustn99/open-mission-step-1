@@ -1,8 +1,9 @@
 class PurchaseInputView {
   #onSubmit;
   #onClickLottoButton;
+  #onError;
 
-  constructor(onSubmit, onClickLottoButton) {
+  constructor(onSubmit, onClickLottoButton, onError) {
     this.formEl = document.createElement("form");
 
     this.purchaseAmountInputContainerEl = document.createElement("div");
@@ -19,6 +20,7 @@ class PurchaseInputView {
 
     this.#onSubmit = onSubmit;
     this.#onClickLottoButton = onClickLottoButton;
+    this.#onError = onError;
   }
 
   render(parent) {
@@ -78,7 +80,7 @@ class PurchaseInputView {
     const lottoInputValue = this.lottoInputEl.value;
     const lotto = lottoInputValue.split(",").map(Number);
 
-    this.#onClickLottoButton(this.savedLottosContainerEl, lotto);
+    this.#onClickLottoButton(lotto);
     this.lottoInputEl.value = "";
   };
 
@@ -93,7 +95,7 @@ class PurchaseInputView {
     } catch (error) {
       alert(error.message);
       this.#initInputValue();
-      this.#initSavedLottos();
+      this.#onError();
     }
   };
 
@@ -102,12 +104,9 @@ class PurchaseInputView {
     this.lottoInputEl.value = "";
   };
 
-  #initSavedLottos = () => {
-    this.savedLottosContainerEl.innerText = "";
-  };
-
   setDisabled = (state) => {
     this.purchaseButtonEl.disabled = state;
+    this.lottoButtonEl.disabled = state;
   };
 }
 
