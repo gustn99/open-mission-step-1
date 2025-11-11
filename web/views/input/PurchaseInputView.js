@@ -1,34 +1,35 @@
 class PurchaseInputView {
   #onSubmit;
+  #onClickLottoButton;
 
-  constructor(onSubmit) {
+  constructor(onSubmit, onClickLottoButton) {
     this.formEl = document.createElement("form");
+
     this.purchaseAmountInputContainerEl = document.createElement("div");
     this.purchaseAmountLabelEl = document.createElement("label");
     this.purchaseAmountInputEl = document.createElement("input");
+
+    this.lottoInputContainerEl = document.createElement("div");
+    this.lottoLabelEl = document.createElement("label");
+    this.lottoInputEl = document.createElement("input");
+    this.lottoButtonEl = document.createElement("button");
+    this.savedLottosContainerEl = document.createElement("div");
+
     this.purchaseButtonEl = document.createElement("button");
 
     this.#onSubmit = onSubmit;
+    this.#onClickLottoButton = onClickLottoButton;
   }
 
   render(parent) {
+    this.#createPurchaseAmountInputContainer();
+    this.#createLottoInputContainer();
+    this.#createPurchaseButton();
+
     this.formEl.id = "purchase-form";
-
-    this.purchaseAmountLabelEl.htmlFor = "purchase-amount-input";
-    this.purchaseAmountLabelEl.innerText = "구매 금액";
-
-    this.purchaseAmountInputEl.type = "text";
-    this.purchaseAmountInputEl.id = "purchase-amount-input";
-
-    this.purchaseButtonEl.type = "submit";
-    this.purchaseButtonEl.innerText = "구매";
-
-    this.purchaseAmountInputContainerEl.append(
-      this.purchaseAmountLabelEl,
-      this.purchaseAmountInputEl
-    );
     this.formEl.append(
       this.purchaseAmountInputContainerEl,
+      this.lottoInputContainerEl,
       this.purchaseButtonEl
     );
     this.formEl.addEventListener("submit", this.#handleSubmit);
@@ -36,13 +37,73 @@ class PurchaseInputView {
     parent.appendChild(this.formEl);
   }
 
+  #createPurchaseAmountInputContainer = () => {
+    this.purchaseAmountLabelEl.htmlFor = "purchase-amount-input";
+    this.purchaseAmountLabelEl.innerText = "구매 금액*";
+
+    this.purchaseAmountInputEl.type = "text";
+    this.purchaseAmountInputEl.id = "purchase-amount-input";
+
+    this.purchaseAmountInputContainerEl.append(
+      this.purchaseAmountLabelEl,
+      this.purchaseAmountInputEl
+    );
+  };
+
+  #createLottoInputContainer = () => {
+    this.lottoLabelEl.htmlFor = "lotto-input";
+    this.lottoLabelEl.innerText = "로또 번호";
+
+    this.lottoInputEl.type = "text";
+    this.lottoInputEl.id = "lotto-input";
+
+    this.lottoButtonEl.type = "button";
+    this.lottoButtonEl.innerText = "추가";
+    this.lottoButtonEl.addEventListener("click", this.#handleLottoButtonClick);
+
+    this.lottoInputContainerEl.append(
+      this.lottoLabelEl,
+      this.lottoInputEl,
+      this.lottoButtonEl,
+      this.savedLottosContainerEl
+    );
+  };
+
+  #createPurchaseButton = () => {
+    this.purchaseButtonEl.type = "submit";
+    this.purchaseButtonEl.innerText = "구매";
+  };
+
+  #handleLottoButtonClick = () => {
+    const lottoInputValue = this.lottoInputEl.value;
+    const lotto = lottoInputValue.split(",").map(Number);
+
+    this.#onClickLottoButton(this.savedLottosContainerEl, lotto);
+    this.lottoInputEl.value = "";
+  };
+
   #handleSubmit = (event) => {
     event.preventDefault();
 
     const purchaseAmountInputValue = this.purchaseAmountInputEl.value;
     const purchaseAmount = Number(purchaseAmountInputValue);
 
-    this.#onSubmit(purchaseAmount);
+    try {
+      this.#onSubmit(purchaseAmount);
+    } catch (error) {
+      alert(error.message);
+      this.#initInputValue();
+      this.#initSavedLottos();
+    }
+  };
+
+  #initInputValue = () => {
+    this.purchaseAmountInputEl.value = "";
+    this.lottoInputEl.value = "";
+  };
+
+  #initSavedLottos = () => {
+    this.savedLottosContainerEl.innerText = "";
   };
 
   setDisabled = (state) => {

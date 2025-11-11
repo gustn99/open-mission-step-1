@@ -2,18 +2,25 @@ import Consumer from "./domains/Consumer.js";
 import WinningNumbers from "./domains/WinningNumbers.js";
 import PurchaseInputView from "./views/input/PurchaseInputView.js";
 import WinningNumbersInputView from "./views/input/WinningNumbersInputView.js";
+import OutputView from "./views/output/OutputView.js";
 import PurchaseSummaryOutputView from "./views/output/PurchaseSummaryOutputView.js";
 import WinningResultOutputView from "./views/output/WinningResultOutputView.js";
 
 class App {
+  #lottos;
   #consumer;
   #winningNumbers;
 
   constructor() {
+    this.#lottos = [];
     this.#consumer = undefined;
     this.#winningNumbers = undefined;
 
-    this.purchaseForm = new PurchaseInputView(this.#handlePurchaseSubmit);
+    this.purchaseForm = new PurchaseInputView(
+      this.#handlePurchaseSubmit,
+      this.#handleLottoButtonClick,
+      this.#handlePurchaseInputError
+    );
     this.winningNumbersForm = new WinningNumbersInputView(
       this.#handleWinningNumbersSubmit
     );
@@ -38,32 +45,26 @@ class App {
     this.winningNumbersForm.render(winningNumbersFormContainer);
   };
 
+  #handleLottoButtonClick = (parent, lotto) => {
+    this.#lottos.push(lotto);
+    OutputView.print(parent, lotto);
+  };
+
   #handlePurchaseSubmit = (purchaseAmount) => {
-    try {
-      this.#consumer = new Consumer(purchaseAmount, []);
-      this.#paintPurchaseSummary();
-      this.purchaseForm.setDisabled(true);
-      this.winningNumbersForm.setDisabled(false);
-    } catch (error) {
-      alert(error.message);
-    }
+    this.#consumer = new Consumer(purchaseAmount, this.#lottos);
+    this.#paintPurchaseSummary();
+    this.purchaseForm.setDisabled(true);
+    this.winningNumbersForm.setDisabled(false);
+  };
+
+  #handlePurchaseInputError = () => {
+    this.#lottos = [];
   };
 
   #handleWinningNumbersSubmit = (winningNumberArray, bonusNumber) => {
-    try {
-      this.#winningNumbers = new WinningNumbers(
-        winningNumberArray,
-        bonusNumber
-      );
-      this.#paintWinningResult();
-      this.winningNumbersForm.setDisabled(true);
-    } catch (error) {
-      alert(error.message);
-    }
-  };
-
-  #handleRestartButtonClick = () => {
-    window.location.reload();
+    this.#winningNumbers = new WinningNumbers(winningNumberArray, bonusNumber);
+    this.#paintWinningResult();
+    this.winningNumbersForm.setDisabled(true);
   };
 
   #paintPurchaseSummary = () => {
@@ -80,18 +81,6 @@ class App {
     const winningResult = this.#consumer.getWinningResult();
     const returnRate = this.#consumer.getReturnRate();
     WinningResultOutputView.print(container, winningResult, returnRate);
-  };
-
-  #setPurchaseFormButtonDisabled = (state) => {
-    const purchaseFormButton = document.querySelector("#purchase-form button");
-    purchaseFormButton.disabled = state;
-  };
-
-  #setWinningNumbersFormButtonDisabled = (state) => {
-    const winningNumbersFormButton = document.querySelector(
-      "#winning-numbers-form button"
-    );
-    winningNumbersFormButton.disabled = state;
   };
 }
 

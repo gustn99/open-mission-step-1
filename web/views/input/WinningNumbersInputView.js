@@ -18,13 +18,13 @@ class WinningNumbersInputView {
     this.formEl.id = "purchase-form";
 
     this.winningNumbersLabelEl.htmlFor = "winning-numbers-input";
-    this.winningNumbersLabelEl.innerText = "당첨 번호";
+    this.winningNumbersLabelEl.innerText = "당첨 번호*";
 
     this.winningNumbersInputEl.type = "text";
     this.winningNumbersInputEl.id = "winning-numbers-input";
 
     this.bonusNumberLabelEl.htmlFor = "bonus-number-input";
-    this.bonusNumberLabelEl.innerText = "보너스 번호";
+    this.bonusNumberLabelEl.innerText = "보너스 번호*";
 
     this.bonusNumberInputEl.type = "text";
     this.bonusNumberInputEl.id = "bonus-number-input";
@@ -60,7 +60,17 @@ class WinningNumbersInputView {
     const bonusNumberInputValue = this.bonusNumberInputEl.value;
     const bonusNumber = Number(bonusNumberInputValue);
 
-    this.#onSubmit(winningNumberArray, bonusNumber);
+    try {
+      this.#onSubmit(winningNumberArray, bonusNumber);
+    } catch (error) {
+      alert(error.message);
+      this.#initInputValue();
+    }
+  };
+
+  #initInputValue = () => {
+    this.winningNumbersInputEl.value = "";
+    this.bonusNumberInputEl.value = "";
   };
 
   setDisabled = (state) => {
