@@ -22,9 +22,6 @@ class App {
   run() {
     this.#renderPurchaseForm();
     this.#renderWinningNumbersForm();
-
-    const restartButton = document.querySelector("#restart-button");
-    restartButton.addEventListener("click", this.#handleRestartButtonClick);
   }
 
   #renderPurchaseForm = () => {
