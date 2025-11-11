@@ -2,22 +2,21 @@ import Formatter from "../formatters/WinningResultFormatter.js";
 import OutputView from "./OutputView.js";
 
 class WinningResultOutputView {
-  static print(winningResult, returnRate) {
-    OutputView.print();
-    OutputView.print("당첨 통계");
-    OutputView.print("---");
-    this.#printWinningResult(winningResult);
-    this.#printReturnRate(returnRate);
+  static print(parent, winningResult, returnRate) {
+    OutputView.print(parent, "당첨 통계");
+    OutputView.print(parent, "---");
+    this.#printWinningResult(parent, winningResult);
+    this.#printReturnRate(parent, returnRate);
   }
 
-  static #printWinningResult(winningResult) {
+  static #printWinningResult(parent, winningResult) {
     const formattedWinningResult = Formatter.formatWinningResult(winningResult);
-    OutputView.print(formattedWinningResult);
+    OutputView.print(parent, formattedWinningResult);
   }
 
-  static #printReturnRate(returnRate) {
+  static #printReturnRate(parent, returnRate) {
     const formattedReturnRate = Formatter.formatReturnRate(returnRate);
-    OutputView.print(formattedReturnRate);
+    OutputView.print(parent, formattedReturnRate);
   }
 }
 

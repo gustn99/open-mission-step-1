@@ -2,20 +2,19 @@ import Formatter from "../formatters/PurchaseSummaryFormatter.js";
 import OutputView from "./OutputView.js";
 
 class PurchaseSummaryOutputView {
-  static print(purchaseCount, lottos) {
-    this.#printPurchaseCount(purchaseCount);
-    this.#printLottos(lottos);
-    OutputView.print();
+  static print(parent, purchaseCount, lottos) {
+    this.#printPurchaseCount(parent, purchaseCount);
+    this.#printLottos(parent, lottos);
   }
 
-  static #printPurchaseCount(purchaseCount) {
+  static #printPurchaseCount(parent, purchaseCount) {
     const formattedPurchaseCount = Formatter.formatPurchaseCount(purchaseCount);
-    OutputView.print(formattedPurchaseCount);
+    OutputView.print(parent, formattedPurchaseCount);
   }
 
-  static #printLottos(lottos) {
+  static #printLottos(parent, lottos) {
     const formattedLottos = Formatter.formatLottos(lottos);
-    OutputView.print(formattedLottos);
+    OutputView.print(parent, formattedLottos);
   }
 }
 
