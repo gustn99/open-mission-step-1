@@ -1,5 +1,7 @@
 import Consumer from "./domains/Consumer.js";
 import WinningNumbers from "./domains/WinningNumbers.js";
+import PurchaseInputView from "./views/input/PurchaseInputView.js";
+import WinningNumbersInputView from "./views/input/WinningNumbersInputView.js";
 import PurchaseSummaryOutputView from "./views/output/PurchaseSummaryOutputView.js";
 import WinningResultOutputView from "./views/output/WinningResultOutputView.js";
 
@@ -10,61 +12,54 @@ class App {
   constructor() {
     this.#consumer = undefined;
     this.#winningNumbers = undefined;
+
+    this.purchaseForm = new PurchaseInputView(this.#handlePurchaseSubmit);
+    this.winningNumbersForm = new WinningNumbersInputView(
+      this.#handleWinningNumbersSubmit
+    );
   }
 
   run() {
-    const purchaseForm = document.querySelector("#purchase-form");
-    purchaseForm.addEventListener("submit", this.#handlePurchaseAmountSubmit);
-
-    const winningNumbersForm = document.querySelector("#winning-numbers-form");
-    winningNumbersForm.addEventListener(
-      "submit",
-      this.#handleWinningNumbersSubmit
-    );
+    this.#renderPurchaseForm();
+    this.#renderWinningNumbersForm();
 
     const restartButton = document.querySelector("#restart-button");
     restartButton.addEventListener("click", this.#handleRestartButtonClick);
   }
 
-  #handlePurchaseAmountSubmit = (event) => {
-    event.preventDefault();
-
-    const purchaseAmountInput = document.querySelector(
-      "#purchase-amount-input"
+  #renderPurchaseForm = () => {
+    const purchaseFormContainer = document.querySelector(
+      "#purchase-form-container"
     );
-    const inputValue = purchaseAmountInput.value;
-    const purchaseAmount = Number(inputValue);
+    this.purchaseForm.render(purchaseFormContainer);
+  };
 
+  #renderWinningNumbersForm = () => {
+    const winningNumbersFormContainer = document.querySelector(
+      "#winning-numbers-form-container"
+    );
+    this.winningNumbersForm.render(winningNumbersFormContainer);
+  };
+
+  #handlePurchaseSubmit = (purchaseAmount) => {
     try {
       this.#consumer = new Consumer(purchaseAmount, []);
       this.#paintPurchaseSummary();
-      this.#setPurchaseFormButtonDisabled(true);
-      this.#setWinningNumbersFormButtonDisabled(false);
+      this.purchaseForm.setDisabled(true);
+      this.winningNumbersForm.setDisabled(false);
     } catch (error) {
       alert(error.message);
     }
   };
 
-  #handleWinningNumbersSubmit = (event) => {
-    event.preventDefault();
-
-    const winningNumbersInput = document.querySelector(
-      "#winning-numbers-input"
-    );
-    const bonusNumberInput = document.querySelector("#bonus-number-input");
-
-    const winningNumbersInputValue = winningNumbersInput.value;
-    const winningNumberArray = winningNumbersInputValue.split(",").map(Number);
-    const bonusNumberInputValue = bonusNumberInput.value;
-    const bonusNumber = Number(bonusNumberInputValue);
-
+  #handleWinningNumbersSubmit = (winningNumberArray, bonusNumber) => {
     try {
       this.#winningNumbers = new WinningNumbers(
         winningNumberArray,
         bonusNumber
       );
       this.#paintWinningResult();
-      this.#setWinningNumbersFormButtonDisabled(true);
+      this.winningNumbersForm.setDisabled(true);
     } catch (error) {
       alert(error.message);
     }
@@ -90,17 +85,17 @@ class App {
     WinningResultOutputView.print(container, winningResult, returnRate);
   };
 
-  #setPurchaseFormButtonDisabled(state) {
+  #setPurchaseFormButtonDisabled = (state) => {
     const purchaseFormButton = document.querySelector("#purchase-form button");
     purchaseFormButton.disabled = state;
-  }
+  };
 
-  #setWinningNumbersFormButtonDisabled(state) {
+  #setWinningNumbersFormButtonDisabled = (state) => {
     const winningNumbersFormButton = document.querySelector(
       "#winning-numbers-form button"
     );
     winningNumbersFormButton.disabled = state;
-  }
+  };
 }
 
 export default App;

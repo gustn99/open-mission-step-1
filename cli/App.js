@@ -12,26 +12,22 @@ class App {
 
   async run() {
     let consumer;
-    while (!consumer) {
-      try {
-        const purchaseAmount = await PurchaseInputView.read();
-        const lottos = await LottosInputView.read();
-        consumer = new Consumer(purchaseAmount, lottos);
-        this.#printInputResult(consumer);
-      } catch (error) {
-        OutputView.print(error.message);
-      }
+    try {
+      const purchaseAmount = await PurchaseInputView.read();
+      const lottos = await LottosInputView.read();
+      consumer = new Consumer(purchaseAmount, lottos);
+      this.#printInputResult(consumer);
+    } catch (error) {
+      OutputView.print(error.message);
     }
 
     let winningNumbers;
-    while (!winningNumbers) {
-      try {
-        const { winningNumbers: rawWinningNumbers, bonusNumber } =
-          await WinningNumbersInputView.read();
-        winningNumbers = new WinningNumbers(rawWinningNumbers, bonusNumber);
-      } catch (error) {
-        OutputView.print(error.message);
-      }
+    try {
+      const { winningNumbers: rawWinningNumbers, bonusNumber } =
+        await WinningNumbersInputView.read();
+      winningNumbers = new WinningNumbers(rawWinningNumbers, bonusNumber);
+    } catch (error) {
+      OutputView.print(error.message);
     }
 
     consumer.checkWinningResult(winningNumbers);
