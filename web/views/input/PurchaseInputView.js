@@ -14,7 +14,6 @@ class PurchaseInputView {
     this.lottoLabelEl = document.createElement("label");
     this.lottoInputEl = document.createElement("input");
     this.lottoButtonEl = document.createElement("button");
-    this.savedLottosContainerEl = document.createElement("div");
 
     this.purchaseButtonEl = document.createElement("button");
 
@@ -66,8 +65,7 @@ class PurchaseInputView {
     this.lottoInputContainerEl.append(
       this.lottoLabelEl,
       this.lottoInputEl,
-      this.lottoButtonEl,
-      this.savedLottosContainerEl
+      this.lottoButtonEl
     );
   };
 
