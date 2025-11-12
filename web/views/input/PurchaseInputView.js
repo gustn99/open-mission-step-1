@@ -78,8 +78,9 @@ class PurchaseInputView {
 
   #handleLottoButtonClick = () => {
     const lottoInputValue = this.lottoInputEl.value;
-    const lotto = lottoInputValue.split(",").map(Number);
+    if (lottoInputValue === "") return;
 
+    const lotto = lottoInputValue.split(",").map(Number);
     this.#onClickLottoButton(lotto);
     this.lottoInputEl.value = "";
   };
