@@ -1,50 +1,35 @@
+import InputView from "./InputView";
+
 class WinningNumbersInputView {
   #onSubmit;
 
   constructor(onSubmit) {
     this.formEl = document.createElement("form");
-    this.winningNumbersInputContainer = document.createElement("div");
-    this.winningNumbersLabelEl = document.createElement("label");
-    this.winningNumbersInputEl = document.createElement("input");
-    this.bonusNumberInputContainer = document.createElement("div");
-    this.bonusNumberLabelEl = document.createElement("label");
-    this.bonusNumberInputEl = document.createElement("input");
+
+    this.winningNumbersView = new InputView({
+      id: "winning-numbers-input",
+      label: "당첨 번호",
+      required: true,
+    });
+
+    this.bonusNumberView = new InputView({
+      id: "bonus-number-input",
+      label: "보너스 번호",
+      required: true,
+    });
+
     this.buttonEl = document.createElement("button");
 
     this.#onSubmit = onSubmit;
   }
 
   render(parent) {
+    this.#createSubmitButton();
+
     this.formEl.id = "purchase-form";
-
-    this.winningNumbersLabelEl.htmlFor = "winning-numbers-input";
-    this.winningNumbersLabelEl.innerText = "당첨 번호*";
-
-    this.winningNumbersInputEl.type = "text";
-    this.winningNumbersInputEl.id = "winning-numbers-input";
-
-    this.bonusNumberLabelEl.htmlFor = "bonus-number-input";
-    this.bonusNumberLabelEl.innerText = "보너스 번호*";
-
-    this.bonusNumberInputEl.type = "text";
-    this.bonusNumberInputEl.id = "bonus-number-input";
-
-    this.buttonEl.type = "submit";
-    this.buttonEl.innerText = "확인";
-    this.buttonEl.disabled = true;
-
-    this.winningNumbersInputContainer.append(
-      this.winningNumbersLabelEl,
-      this.winningNumbersInputEl
-    );
-    this.bonusNumberInputContainer.append(
-      this.bonusNumberLabelEl,
-      this.bonusNumberInputEl
-    );
-
     this.formEl.append(
-      this.winningNumbersInputContainer,
-      this.bonusNumberInputContainer,
+      this.winningNumbersView.getEl(),
+      this.bonusNumberView.getEl(),
       this.buttonEl
     );
     this.formEl.addEventListener("submit", this.#handleSubmit);
@@ -52,25 +37,27 @@ class WinningNumbersInputView {
     parent.appendChild(this.formEl);
   }
 
+  #createSubmitButton = () => {
+    this.buttonEl.type = "submit";
+    this.buttonEl.innerText = "확인";
+    this.buttonEl.disabled = true;
+  };
+
   #handleSubmit = (event) => {
     event.preventDefault();
 
-    const winningNumbersInputValue = this.winningNumbersInputEl.value;
+    const winningNumbersInputValue = this.winningNumbersView.getValue();
     const winningNumberArray = winningNumbersInputValue.split(",").map(Number);
-    const bonusNumberInputValue = this.bonusNumberInputEl.value;
+    const bonusNumberInputValue = this.bonusNumberView.getValue();
     const bonusNumber = Number(bonusNumberInputValue);
 
     try {
       this.#onSubmit(winningNumberArray, bonusNumber);
     } catch (error) {
       alert(error.message);
-      this.#initInputValue();
+      this.winningNumbersView.clearValue();
+      this.bonusNumberView.clearValue();
     }
-  };
-
-  #initInputValue = () => {
-    this.winningNumbersInputEl.value = "";
-    this.bonusNumberInputEl.value = "";
   };
 
   setDisabled = (state) => {
