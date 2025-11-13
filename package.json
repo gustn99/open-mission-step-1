@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start:cli": "node ./cli/index.js",
-    "dev:web": "vite --config web/vite.config.js"
+    "cli": "node ./cli/index.js",
+    "web": "vite --config web/vite.config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.25.8",
